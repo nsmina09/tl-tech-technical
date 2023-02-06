@@ -46,50 +46,52 @@ getAllJobs = () => {
     })
 }
 
-getMyProfile = async (contactNumber) => {
-    const user = await db.User.findOne({ contactNumber });
-    if (user) {
-        return {
-            status: true,
-            statusCode: 200,
-            you: user,
-        };
-    } else {
-        return {
-            status: false,
-            statusCode: 400,
-            message: 'user not found',
-        };
-    }
+getMyProfile = (contactNumber) => {
+    return db.User.findOne({ contactNumber }).then(user => {
+        if (user) {
+            return {
+                status: true,
+                statusCode: 200,
+                you: user,
+            };
+        } else {
+            return {
+                status: false,
+                statusCode: 400,
+                message: 'user not found',
+            };
+        }
+    })
 }
 
-negotiate=(jobId,name,newrate,description)=>{
-return db.Jobs.findOne({jobId}).then(result=>{
-    if(result){
-        result.negotiation.push({
-            name:name,
-            newRate:newrate,
-            description:description
-        })
-        result.save();
-        return {
-            status: true,
-            statusCode: 200,
-            message: 'negotiated successfully',
-            yourNegotiation: result.negotiation
-        };
-    }else{
-        return {
-            status: false,
-            statusCode: 400,
-            message: 'no jobs founded'
-        };
-    }
-})
+negotiate = (jobId, name, newrate, description) => {
+    return db.Jobs.findOne({ jobId }).then(result => {
+        if (result) {
+            result.negotiation.push({
+                name: name,
+                newRate: newrate,
+                description: description
+            })
+            result.save();
+            return {
+                status: true,
+                statusCode: 200,
+                message: 'negotiated successfully',
+                yourNegotiation: result.negotiation
+            };
+        } else {
+            return {
+                status: false,
+                statusCode: 400,
+                message: 'no jobs founded'
+            };
+        }
+    })
 }
 
 module.exports = {
     createProfile,
     getAllJobs,
-    getMyProfile
+    getMyProfile,
+    negotiate
 }

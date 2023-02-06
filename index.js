@@ -32,3 +32,13 @@ app.get('/my-profile/:contactNumber', (req, res) => {
         res.status(result.statusCode).json(result);
     })
 })
+
+app.post('/negotiate', (req, res) => {
+    dataservice.negotiate(
+        req.body.jobId,
+        req.body.name,
+        req.body.newrate,
+        req.body.description).then(result => {
+            res.status(result.statusCode).json(result);
+        })
+})
